@@ -29,7 +29,10 @@ public class BowlingController {
         while (!(bowling.getFinishedState())) {
             String throwInput = bowlingView.userThrowInput();
             bowling.processThrow(throwInput);
-            System.out.println(bowling);
+            System.out.println("Runde: " + bowling.round);
+            System.out.println("Punkte: " + bowling.points);
+            System.out.println("Finished?" + bowling. getFinishedState());
+            //System.out.println(bowling);
         }
     }
 
