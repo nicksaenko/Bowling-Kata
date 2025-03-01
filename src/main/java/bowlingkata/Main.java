@@ -1,7 +1,11 @@
 package bowlingkata;
 
+import bowlingkata.controller.BowlingController;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+
+        BowlingController bowlingController = new BowlingController();
+        bowlingController.greetingAndMenue();
     }
 }
