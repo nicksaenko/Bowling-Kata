@@ -25,6 +25,12 @@ public class BowlingController {
 
     public void startGame() {
         this.bowling = new Bowling();
+
+        while (!(bowling.getFinishedState())){
+            String throwInput = bowlingView.userThrowInput();
+            bowling.processThrow(throwInput);
+            System.out.println(bowling);
+        }
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 public class Bowling {
 
     Map<Integer, String[]> frames;
+    boolean finished = false;
 
     public Bowling() {
         frames = new HashMap<>();
@@ -19,4 +20,18 @@ public class Bowling {
         }
     }
 
+    public void processThrow(String throwInput){
+        // TODO: Bowling-Punktesystem-Logik implementieren
+        System.out.println("User hat " + throwInput + "eingeben.");
+    }
+
+    public boolean getFinishedState() {
+        return finished;
+    }
+
+    @Override
+    public String toString() {
+        //TODO: Punktesystem-Ansicht implementieren
+        return null;
+    }
 }

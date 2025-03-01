@@ -1,11 +1,14 @@
 package bowlingkata.view;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class BowlingView {
 
     private Scanner scanner = new Scanner(System.in);
     private int menueInput = -1;
+    String throwInput;
 
     public void printGreeting(){
         System.out.println("Hi! Willkommen beim Bowling Kata!");
@@ -25,6 +28,26 @@ public class BowlingView {
         return menueInput;
     }
 
+    public String userThrowInput(){
+        System.out.println("\nBitte trage dein Wurfergebnis ein (1-9), (X), (/): ");
+
+        if (scanner.hasNextLine()) {
+            throwInput = scanner.next();
+            validateThrowInput(throwInput);
+        }else {
+            errorOutput();
+        }
+        return throwInput;
+    }
+
+    private void validateThrowInput(String throwInput){
+        List<String> validInputs = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "X", "/");
+        if (!validInputs.contains(throwInput)) {
+            errorOutput();
+            userThrowInput();
+        }
+    }
+
     private void validateMenueInput(int menueInput){
         if (menueInput != 1 && menueInput != 0){
             errorOutput();
@@ -33,7 +56,7 @@ public class BowlingView {
     }
 
     private void errorOutput(){
-        System.out.println("Bitte trage eine 1 oder 0 ein.");
+        System.out.println("Ungueltiger Eintrag!");
     }
 
 }
