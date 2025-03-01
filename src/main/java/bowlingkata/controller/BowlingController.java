@@ -12,13 +12,13 @@ public class BowlingController {
         this.bowlingView = new BowlingView();
     }
 
-    public void greetingAndMenue(){
+    public void greetingAndMenue() {
         bowlingView.printGreeting();
         int menueInput = bowlingView.showMenue();
 
         if (menueInput == 1) {
             startGame();
-        }else if (menueInput == 0) {
+        } else if (menueInput == 0) {
             System.exit(0);
         }
     }
@@ -26,7 +26,7 @@ public class BowlingController {
     public void startGame() {
         this.bowling = new Bowling();
 
-        while (!(bowling.getFinishedState())){
+        while (!(bowling.getFinishedState())) {
             String throwInput = bowlingView.userThrowInput();
             bowling.processThrow(throwInput);
             System.out.println(bowling);
