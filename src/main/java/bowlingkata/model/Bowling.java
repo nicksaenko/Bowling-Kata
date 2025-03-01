@@ -43,8 +43,6 @@ public class Bowling {
 
     // TODO: Punkte-Rechnung
 
-    //TODO: Problem gerade: Wir sagen schon nach einem Wurf in der 10. Runde Finish
-
     /*
     Punkte:
 
@@ -91,8 +89,8 @@ public class Bowling {
             } else if (currentThrow[2] == null && (currentThrow[0].equals(throwValue) || currentThrow[1].equals("/"))) {
                 currentThrow[2] = throwValue;
                 points += 10;
+                finished = true;
             }
-            finished = true;
         }
 
     }
@@ -171,11 +169,15 @@ public class Bowling {
                 currentThrows[1] = throwValue;
                 points += Integer.parseInt(throwValue);
 
+                if (!(currentThrows[0].equals("X"))) {
+                    finished = true;
+                }
+
             } else if (currentThrows[2] == null && (currentThrows[0].equals("X") || currentThrows[1].equals("/"))) {
                 currentThrows[2] = throwValue;
                 points += Integer.parseInt(throwValue);
+                finished = true;
             }
-            finished = true;
         }
 
     }
