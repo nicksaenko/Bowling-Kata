@@ -3,14 +3,23 @@ package bowlingkata.model;
 import java.util.HashMap;
 import java.util.Map;
 
+    /* Punktesystem:
+
+    Strike: Wenn erste Runde ein Strike: 10 Punkte + X (erster Wurf aus Runde 2) + Y (zweiter Wurf aus Runde 2)
+    Spare: Wenn erste Runde: 8 Pins umgeworfen, dann Spare: 8 + 2 + X (erster Wurf aus Runde 2)
+
+    Wenn im 9. Frame ein Strike oder ein Spare geworfen wurde, dann wird das natürlich für die Würfe im
+    10. Frame berücksichtigt. Ein Strike oder ein Spare innerhalb des 10. Frames aktivieren die Bedingung nicht. */
+
 public class Bowling {
 
     Map<Integer, String[]> frames;
     boolean finished = false;
     String throwValue;
-    public int round = 1;
+    int round = 1;
     public int points = 0;
     boolean thrownStrike = false;
+    boolean thrownStrikeInARow = false;
     boolean thrownSpare = false;
 
     public Bowling() {
@@ -41,39 +50,28 @@ public class Bowling {
         }
     }
 
-    // TODO: Punkte-Rechnung
-
-    /*
-    Punkte:
-
-    Strike: Wenn erste Runde ein Strike: 10 Punkte + X (erster Wurf aus Runde 2) + Y (zweiter Wurf aus Runde 2)
-
-    Spare: Wenn erste Runde: 8 Pins umgeworfen, dann Spare: 8 + 2 + X (erster Wurf aus Runde 2)
-
-    In der letzten Runde wird alles normal addiert.
-     */
-
-
     private void processStrike(String throwValue) {
         if (round < 10) {
             String[] currentThrow = frames.get(round);
 
-            if (currentThrow[0] == null) {
-                currentThrow[0] = throwValue;
-                currentThrow[1] = "";
-                round++;
+            currentThrow[0] = throwValue;
+            currentThrow[1] = "";
+            round++;
 
-                if (thrownStrike){ // wenn zwei Strikes hinter einander folgen
-                    points += 2 * 10;
-                }else{
+            points += 10;
+
+            // Muss ich hier vllt noch checken, ob es davor ein Spare gab?
+
+            if (thrownStrike) {
+                points += 10;
+
+                if (thrownStrikeInARow) {
                     points += 10;
                 }
-
-                thrownStrike = true;
-
-            } else { // der erste Wurf ist 1-9
-                System.out.println("Es ist nicht möglich, im zweiten Wurf einen Strike zu werfen!");
             }
+
+            thrownStrikeInARow = thrownStrike;
+            thrownStrike = true;
 
         } else { // 10. Runde
             String[] currentThrow = frames.get(round);
@@ -82,17 +80,32 @@ public class Bowling {
                 currentThrow[0] = throwValue;
                 points += 10;
 
+                if (thrownStrike) {
+                    points += 10;
+
+                    if (thrownStrikeInARow) {
+                        points += 10;
+                    }
+                }
+
+                thrownStrikeInARow = thrownStrike;
+                thrownStrike = true;
+
             } else if (currentThrow[1] == null) {
                 currentThrow[1] = throwValue;
                 points += 10;
 
-            } else if (currentThrow[2] == null && (currentThrow[0].equals(throwValue) || currentThrow[1].equals("/"))) {
+                if (thrownStrike) {
+                    points += 10;
+                }
+                thrownStrikeInARow = false;
+
+            } else if (currentThrow[2] == null) {
                 currentThrow[2] = throwValue;
                 points += 10;
                 finished = true;
             }
         }
-
     }
 
     private void processSpare(String throwValue) {
@@ -106,10 +119,10 @@ public class Bowling {
                 currentThrow[1] = throwValue;
                 thrownSpare = true;
 
-                if (thrownStrike){
+                if (thrownStrike) {
                     points += 2 * (10 - Integer.parseInt(currentThrow[0]));
                     thrownStrike = false;
-                }else{
+                } else {
                     points += (10 - Integer.parseInt(currentThrow[0]));
                 }
 
@@ -121,14 +134,16 @@ public class Bowling {
 
             if (currentThrow[0] == null) {
                 System.out.println("Es ist nicht möglich, im ersten Wurf einen Spare zu werfen!");
+
             } else if (currentThrow[1] == null) {
                 currentThrow[1] = throwValue;
                 points += (10 - Integer.parseInt(currentThrow[0]));
-            } else {
+
+            } else { // Ist das hier richtig?
                 System.out.println("Es ist nicht möglich, im dritten Wurf einen Spare zu werfen!");
             }
-
         }
+
     }
 
     private void processNumber(String throwValue) {
@@ -138,20 +153,25 @@ public class Bowling {
             if (currentThrows[0] == null) {
                 currentThrows[0] = throwValue;
 
-                if (thrownStrike || thrownSpare) {
+                if (thrownStrikeInARow) {
+                    points += 3 * Integer.parseInt(throwValue);
+                    thrownStrikeInARow = false;
+
+                } else if (thrownStrike || thrownSpare) {
                     points += 2 * Integer.parseInt(throwValue);
                     thrownSpare = false;
-                }else{
+
+                } else {
                     points += Integer.parseInt(throwValue);
                 }
 
             } else {
                 currentThrows[1] = throwValue;
 
-                if (thrownStrike){
+                if (thrownStrike) {
                     points += 2 * Integer.parseInt(throwValue);
                     thrownStrike = false;
-                }else{
+                } else {
                     points += Integer.parseInt(throwValue);
                 }
 
@@ -163,13 +183,27 @@ public class Bowling {
 
             if (currentThrows[0] == null) {
                 currentThrows[0] = throwValue;
-                points += Integer.parseInt(throwValue);
 
-            } else if (currentThrows[1] == null && !(currentThrows[0].equals("X"))) {
+                if (thrownSpare) {
+                    points += 2 * Integer.parseInt(throwValue);
+                } else if (thrownStrike) {
+                    points += 2 * Integer.parseInt(throwValue);
+                } else {
+                    points += Integer.parseInt(throwValue);
+                }
+
+            } else if (currentThrows[1] == null) {
                 currentThrows[1] = throwValue;
-                points += Integer.parseInt(throwValue);
 
-                if (!(currentThrows[0].equals("X"))) {
+                if (thrownStrike) {
+                    points += 2 * Integer.parseInt(throwValue);
+                    thrownStrike = false;
+                } else {
+                    points += Integer.parseInt(throwValue);
+                }
+
+
+                if (!(currentThrows[0].equals("X")) && !(currentThrows[1].equals("/"))) {
                     finished = true;
                 }
 
