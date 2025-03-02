@@ -17,7 +17,7 @@ public class Bowling {
     boolean finished = false;
     String throwValue;
     int round = 1;
-    public int points = 0;
+    int points = 0;
     boolean thrownStrike = false;
     boolean thrownStrikeInARow = false;
     boolean thrownSpare = false;
@@ -62,6 +62,7 @@ public class Bowling {
 
             if (thrownSpare) {
                 points += 10;
+                thrownSpare = false;
             }
 
             if (thrownStrike) {
@@ -94,7 +95,7 @@ public class Bowling {
 
                 // Überprüfung, ob im 9. Frame ein Strike geworfen wurde
                 String[] lastThrows = frames.get(round - 1);
-                if (lastThrows[0].equals("X")) { // falls ja, muss Verdopplung bestehen bleiben
+                if (lastThrows[0].equals("X") && currentThrow[0] != null) { // falls ja, muss Verdopplung bestehen bleiben
                     thrownStrike = true;
                 } else {                          // falls nein, darf Verdopplung im letzten Frame nicht stattfinden
                     thrownStrike = false;
@@ -230,10 +231,49 @@ public class Bowling {
         return finished;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
     @Override
     public String toString() {
-        //TODO: Punktesystem-Ansicht implementieren
-        return null;
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("Frame\t\t");
+        for (int i = 1; i <= 10; i++) {
+            builder.append(i).append("\t\t");
+        }
+
+        builder.append("\n");
+
+        builder.append("Würfe\t\t");
+        for (int i = 1; i <= 10; i++) {
+            String[] frame = frames.get(i);
+            if (frame != null) {
+
+                if (frame[0] != null) {
+                    builder.append(frame[0]);
+                } else {
+                    builder.append("-");
+                }
+
+                builder.append(" ");
+
+                if (frame.length > 1 && frame[1] != null) {
+                    builder.append(frame[1]);
+                } else {
+                    builder.append("-");
+                }
+
+                if (i == 10 && frame.length == 3 && frame[2] != null) {
+                    builder.append(" ").append(frame[2]);
+                }
+                builder.append("\t\t");
+            }
+        }
+        builder.append("\nPunkte: " + points);
+
+        return builder.toString();
     }
 
 }
