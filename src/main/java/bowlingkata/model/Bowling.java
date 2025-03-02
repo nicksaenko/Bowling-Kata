@@ -79,6 +79,7 @@ public class Bowling {
         } else { // 10. Runde
             String[] currentThrow = frames.get(round);
 
+            // Erster Wurf
             if (currentThrow[0] == null) {
                 currentThrow[0] = throwValue;
                 points += 10;
@@ -101,6 +102,7 @@ public class Bowling {
                     thrownStrike = false;
                 }
 
+            // Zweiter Wurf
             } else if (currentThrow[1] == null) {
                 currentThrow[1] = throwValue;
                 points += 10;
@@ -110,6 +112,7 @@ public class Bowling {
                 }
                 thrownStrikeInARow = false;
 
+            // Dritter Wurf
             } else if (currentThrow[2] == null) {
                 currentThrow[2] = throwValue;
                 points += 10;
@@ -122,9 +125,11 @@ public class Bowling {
         if (round < 10) {
             String[] currentThrow = frames.get(round);
 
+            // Erster Wurf
             if (currentThrow[0] == null) {
                 System.out.println("Es ist nicht möglich, im ersten Wurf einen Spare zu werfen!");
 
+            // Zweiter Wurf
             } else if (currentThrow[1] == null) {
                 currentThrow[1] = throwValue;
                 thrownSpare = true;
@@ -142,13 +147,16 @@ public class Bowling {
         } else { // 10. Runde
             String[] currentThrow = frames.get(round);
 
+            // Erster Wurf
             if (currentThrow[0] == null) {
                 System.out.println("Es ist nicht möglich, im ersten Wurf einen Spare zu werfen!");
 
+            // Zweiter Wurf
             } else if (currentThrow[1] == null) {
                 currentThrow[1] = throwValue;
                 points += (10 - Integer.parseInt(currentThrow[0]));
 
+            // Dritter Wurf (falls erlaubt)
             } else if (currentThrow[2] == null && (!currentThrow[1].equals("X")) && (!currentThrow[1].equals("/"))) { // Ist das hier richtig?
                 points += (10 - Integer.parseInt(currentThrow[1]));
                 finished = true;
@@ -160,38 +168,47 @@ public class Bowling {
     private void processNumber(String throwValue) {
         if (round < 10) {
             String[] currentThrows = frames.get(round);
+            int pins = Integer.parseInt(throwValue);
 
+            // Erster Wurf
             if (currentThrows[0] == null) {
                 currentThrows[0] = throwValue;
 
                 if (thrownStrikeInARow) {
-                    points += 3 * Integer.parseInt(throwValue);
+                    points += 3 * pins;
                     thrownStrikeInARow = false;
 
                 } else if (thrownStrike || thrownSpare) {
-                    points += 2 * Integer.parseInt(throwValue);
+                    points += 2 * pins;
                     thrownSpare = false;
 
                 } else {
-                    points += Integer.parseInt(throwValue);
+                    points += pins;
                 }
 
+                // Zweiter Wurf
             } else {
-                currentThrows[1] = throwValue;
 
-                if (thrownStrike) {
-                    points += 2 * Integer.parseInt(throwValue);
-                    thrownStrike = false;
+                if (pins + Integer.parseInt(currentThrows[0]) > 10) {
+                    System.out.println("Es gibt doch nur 10 Pins ;)");
+
                 } else {
-                    points += Integer.parseInt(throwValue);
-                }
+                    currentThrows[1] = throwValue;
 
-                round++;
+                    if (thrownStrike) {
+                        points += 2 * Integer.parseInt(throwValue);
+                        thrownStrike = false;
+                    } else {
+                        points += Integer.parseInt(throwValue);
+                    }
+                    round++;
+                }
             }
 
         } else { // 10. Runde
             String[] currentThrows = frames.get(round);
 
+            // Erster Wurf
             if (currentThrows[0] == null) {
                 currentThrows[0] = throwValue;
 
@@ -203,6 +220,7 @@ public class Bowling {
                     points += Integer.parseInt(throwValue);
                 }
 
+            // Zweiter Wurf
             } else if (currentThrows[1] == null) {
                 currentThrows[1] = throwValue;
 
@@ -218,6 +236,7 @@ public class Bowling {
                     finished = true;
                 }
 
+            // Dritter Wurf (falls erlaubt)
             } else if (currentThrows[2] == null && (currentThrows[0].equals("X") || currentThrows[1].equals("/"))) {
                 currentThrows[2] = throwValue;
                 points += Integer.parseInt(throwValue);

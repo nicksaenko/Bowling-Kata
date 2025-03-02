@@ -110,7 +110,7 @@ public class BowlingKataTest {
     }
 
     @Test
-    public void testEightNinethAndFirstOfTenthStrike() {
+    public void testSpareFollowedByStrikesInEighthAndNinthFrames() {
 
         bowling.processThrow("2");
         bowling.processThrow("3");
@@ -151,7 +151,5 @@ public class BowlingKataTest {
         }
         assertEquals(0, bowling.getPoints());
     }
-
-
 
 }
