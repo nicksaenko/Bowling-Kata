@@ -60,7 +60,9 @@ public class Bowling {
 
             points += 10;
 
-            // Muss ich hier vllt noch checken, ob es davor ein Spare gab?
+            if (thrownSpare) {
+                points += 10;
+            }
 
             if (thrownStrike) {
                 points += 10;
@@ -89,7 +91,14 @@ public class Bowling {
                 }
 
                 thrownStrikeInARow = thrownStrike;
-                thrownStrike = true;
+
+                // Überprüfung, ob im 9. Frame ein Strike geworfen wurde
+                String[] lastThrows = frames.get(round - 1);
+                if (lastThrows[0].equals("X")) { // falls ja, muss Verdopplung bestehen bleiben
+                    thrownStrike = true;
+                } else {                          // falls nein, darf Verdopplung im letzten Frame nicht stattfinden
+                    thrownStrike = false;
+                }
 
             } else if (currentThrow[1] == null) {
                 currentThrow[1] = throwValue;
@@ -139,8 +148,9 @@ public class Bowling {
                 currentThrow[1] = throwValue;
                 points += (10 - Integer.parseInt(currentThrow[0]));
 
-            } else { // Ist das hier richtig?
-                System.out.println("Es ist nicht möglich, im dritten Wurf einen Spare zu werfen!");
+            } else if (currentThrow[2] == null && (!currentThrow[1].equals("X")) && (!currentThrow[1].equals("/"))) { // Ist das hier richtig?
+                points += (10 - Integer.parseInt(currentThrow[1]));
+                finished = true;
             }
         }
 
