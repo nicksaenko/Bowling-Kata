@@ -54,27 +54,32 @@ public class Bowling {
         if (round < 10) {
             String[] currentThrow = frames.get(round);
 
-            currentThrow[0] = throwValue;
-            currentThrow[1] = "";
-            round++;
+            if (currentThrow[0] != null && !currentThrow[0].isEmpty()) {
+                System.out.println("Es ist nicht möglich, im zweiten Wurf einen Strike zu werfen!");
+            } else {
+                currentThrow[0] = throwValue;
+                currentThrow[1] = "";
+                round++;
 
-            points += 10;
-
-            if (thrownSpare) {
-                points += 10;
-                thrownSpare = false;
-            }
-
-            if (thrownStrike) {
                 points += 10;
 
-                if (thrownStrikeInARow) {
+                if (thrownSpare) {
                     points += 10;
+                    thrownSpare = false;
                 }
-            }
 
-            thrownStrikeInARow = thrownStrike;
-            thrownStrike = true;
+                if (thrownStrike) {
+                    points += 10;
+
+                    if (thrownStrikeInARow) {
+                        points += 10;
+                    }
+                }
+
+                thrownStrikeInARow = thrownStrike;
+                thrownStrike = true;
+
+            }
 
         } else { // 10. Runde
             String[] currentThrow = frames.get(round);
@@ -102,7 +107,7 @@ public class Bowling {
                     thrownStrike = false;
                 }
 
-            // Zweiter Wurf
+                // Zweiter Wurf
             } else if (currentThrow[1] == null) {
                 currentThrow[1] = throwValue;
                 points += 10;
@@ -112,7 +117,7 @@ public class Bowling {
                 }
                 thrownStrikeInARow = false;
 
-            // Dritter Wurf
+                // Dritter Wurf
             } else if (currentThrow[2] == null) {
                 currentThrow[2] = throwValue;
                 points += 10;
@@ -129,7 +134,7 @@ public class Bowling {
             if (currentThrow[0] == null) {
                 System.out.println("Es ist nicht möglich, im ersten Wurf einen Spare zu werfen!");
 
-            // Zweiter Wurf
+                // Zweiter Wurf
             } else if (currentThrow[1] == null) {
                 currentThrow[1] = throwValue;
                 thrownSpare = true;
@@ -151,12 +156,12 @@ public class Bowling {
             if (currentThrow[0] == null) {
                 System.out.println("Es ist nicht möglich, im ersten Wurf einen Spare zu werfen!");
 
-            // Zweiter Wurf
+                // Zweiter Wurf
             } else if (currentThrow[1] == null) {
                 currentThrow[1] = throwValue;
                 points += (10 - Integer.parseInt(currentThrow[0]));
 
-            // Dritter Wurf (falls erlaubt)
+                // Dritter Wurf (falls erlaubt)
             } else if (currentThrow[2] == null && (!currentThrow[1].equals("X")) && (!currentThrow[1].equals("/"))) { // Ist das hier richtig?
                 points += (10 - Integer.parseInt(currentThrow[1]));
                 finished = true;
@@ -220,7 +225,7 @@ public class Bowling {
                     points += Integer.parseInt(throwValue);
                 }
 
-            // Zweiter Wurf
+                // Zweiter Wurf
             } else if (currentThrows[1] == null) {
                 currentThrows[1] = throwValue;
 
@@ -236,7 +241,7 @@ public class Bowling {
                     finished = true;
                 }
 
-            // Dritter Wurf (falls erlaubt)
+                // Dritter Wurf (falls erlaubt)
             } else if (currentThrows[2] == null && (currentThrows[0].equals("X") || currentThrows[1].equals("/"))) {
                 currentThrows[2] = throwValue;
                 points += Integer.parseInt(throwValue);

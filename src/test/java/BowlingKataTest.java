@@ -152,4 +152,41 @@ public class BowlingKataTest {
         assertEquals(0, bowling.getPoints());
     }
 
+    @Test
+    public void testWrongPlacedStrikeShouldntBeAllowed() {
+
+        bowling.processThrow("2");
+        bowling.processThrow("X"); // darf nicht erlaubt sein, wird nicht akzeptiert
+        bowling.processThrow("3");
+
+        bowling.processThrow("4");
+        bowling.processThrow("X"); // darf nicht erlaubt sein, wird nicht akzeptiert
+        bowling.processThrow("5");
+
+        bowling.processThrow("1");
+        bowling.processThrow("X"); // darf nicht erlaubt sein, wird nicht akzeptiert
+        bowling.processThrow("5");
+
+        bowling.processThrow("X");
+
+        bowling.processThrow("4");
+        bowling.processThrow("/");
+
+        bowling.processThrow("0");
+        bowling.processThrow("0");
+
+        bowling.processThrow("2");
+        bowling.processThrow("/");
+
+        bowling.processThrow("X");
+
+        bowling.processThrow("X");
+
+        bowling.processThrow("X");
+        bowling.processThrow("2");
+        bowling.processThrow("/");
+
+        assertEquals(142, bowling.getPoints());
+    }
+
 }
